@@ -1,42 +1,36 @@
-install.packages("reader")
-install.packages("DataExplorer")
-install.packages("GGally")
-install.packages("SmartEDA")
-install.packages("stringr")
-
-
-library(tidyverse)
-library(dplyr)
-library(ggplot2)
-library(corrplot)
+# a collection of packages for data manipulation, including dplyr and ggplot2.
+library(tidyverse) 
+# a package for visualizing correlation matrices.
+library(corrplot) 
+#a package for machine learning modeling and evaluation.
 library(caret)
+#a package for combining multiple machine learning models.
 library(caretEnsemble)
+# a package for performing exploratory data analysis.
 library(SmartEDA)
-library(DataExplorer)
-library(GGally)
-library(reader)
-library(doParallel)
+# a package for manipulating strings.
 library(stringr)
 
-
+# Getting the data
 car_predict=read.csv("CarPrice_prediction.csv")
-
 str(car_predict)
-
 head(car_predict)
 
 # Data cleaning
 
+# Checking for null values
 sum(is.na(car_predict))
 
-car_predict=car_predict[,-c(1,2)]
-
+# Changing the all column names to lowercase 
 names(car_predict) <- tolower(names(car_predict))
 
-unique(car_predict$carname)
-
+#Extracting the first word from a string column
 car_predict$carname <- sapply(strsplit(car_predict$carname, " "), `[`, 1)
 
+# getting unique values in a carname column
+unique(car_predict$carname)
+
+# Renaming the mispelled words in the column
 car_predict$carname <- str_replace(car_predict$carname, "maxda", "mazda")
 car_predict$carname <- str_replace(car_predict$carname, "toyouta", "toyota")
 car_predict$carname <- str_replace(car_predict$carname, "vokswagen", "volkswagen")
@@ -82,7 +76,7 @@ head(car_predictnums)
 car_predictnums=car_predictnums %>% select(-c("price"))
 str(car_predictnums)
 
-# Removing of outliers
+# checking for outliers
 boxplot(car_predictnums)
 
 boxplot(car_predictnums$enginesize,col = "red")
@@ -115,6 +109,7 @@ corr.matrix=cor(car_predictnums)
 car_predict.highlyCorrelated = findCorrelation(corr.matrix, cutoff=0.7)
 colnames(car_predictnums[,car_predict.highlyCorrelated])
 
+#
 car_predict.pca=prcomp(car_predictnums,center = TRUE,scale = TRUE,
              retx = T)
 
@@ -166,7 +161,7 @@ car_predict$fuelsystem=as.factor(car_predict$fuelsystem)
 
 str(car_predict)
 
-# select factor variables to convert, but leave Attrition out
+# select factor variables to convert,
 varstod = car_predict[,sapply(car_predict, is.factor)]
 head(varstod)
 
@@ -180,17 +175,16 @@ car_predict_clean = data.frame(ddummy, price = car_predict$price,car_predict.pca
 
 str(car_predict_clean)
 
-# remove near zero variables (except for attr)
+# remove near zero variables
 rem.cols = nearZeroVar(car_predict_clean, names = TRUE)
 rem.cols
+
 # Get all column names 
 allcols = names(car_predict_clean)
 # Remove from data
 car_predict_clean.final= car_predict_clean[ , setdiff(allcols, rem.cols)]
 
 str(car_predict_clean.final)
-
-##plot_bar(car_predict_clean.final, by="price")
 
 plot_qq(car_predict_clean.final)
 
