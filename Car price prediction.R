@@ -92,8 +92,6 @@ car_predictnums$horsepower=log(car_predictnums$horsepower)
 
 boxplot(car_predictnums$compressionratio,col = "green")
 compressionratiooutliers= which(car_predictnums$compressionratio > 3)
-car_predictnums[compressionratiooutliers,"compressionratio"]
-car_predictnums = car_predictnums[-compressionratiooutliers,]
 hist(car_predictnums$compressionratio,col = 'red')
 car_predictnums$compressionratio=log(car_predictnums$compressionratio)
 
@@ -209,18 +207,15 @@ err=sqrt(mean((car_predict_clean.final$price-pre)^2))
 err
 
 # Splitting the dataset to train and test
-
+car_predict_clean.final$price = log(car_predict_clean.final$price)
 carsplit=createDataPartition(car_predict_clean.final$price,
                              p=0.75,
                              list = FALSE)
 
-dtrain=car_predict_clean.final[carsplit,]
-dtest=car_predict_clean.final[-carsplit,]
-
 str(car_predict_clean.final)
 
-x=car_predict_clean.final[,-20]
-y=car_predict_clean.final[, 20]
+x=car_predict_clean.final[,-24]
+y=car_predict_clean.final[, 24]
 
 xtrain=x[carsplit,]
 str(xtrain)
@@ -288,25 +283,3 @@ predRMSE = data.frame(ensemble = RMSE(predictens1, ytest),
                       XGBT = RMSE(predxgbT, ytest),
                       XGBL = RMSE(predxgbL, ytest))
 print(predRMSE)
-
-set.seed(123)
-xgbTreemodel1 = train(xtrain,
-                     ytrain,
-                     trControl = mycontrol,
-                     method="xgbLinear",
-                     metric="RMSE",
-                     preProcess = c("center","scale"))
-
-xgbTreemodel1= train(xtrain,
-                      ytrain,
-                      trControl = mycontrol,
-                      method="xgbLinear",
-                      metric="RMSE",
-                      preProcess = c("center","scale"),
-                      importance=TRUE)
-
-summary(carmodel)
-
-plot(varImp(carmodel))
-
-  
