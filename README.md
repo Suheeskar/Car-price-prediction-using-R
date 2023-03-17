@@ -15,20 +15,20 @@ How well those variables describe the price of a car Based on various market sur
 
 3) Data Understanding
 
-4) Data handling
+4) Data cleaning
 
 5) Data visualization
 
-6) Data preparation
+6) PCA
 
 7) Splitting the Data and feature scaling
 
-8) Building a linear regression models
+8) Building a various regression models like ("lm","rf","svmRadial","xgbTree","xgbLinear")
 
-9) Residual analysis of the train data
+9) Ensembling the Models
 
-10) Making Predictions Using the Final Model
+10) Making Predictions Using the Models
 
-11) Model Evaluation
+11) Model Evaluation using RMSE
 
 12) Conclusion
