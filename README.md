@@ -31,4 +31,14 @@ How well those variables describe the price of a car Based on various market sur
 
 11) Model Evaluation using RMSE
 
-12) Conclusion
+**Conclusion**
+
+out of all RMSE values, Ensembled method gives the less error.
+
+| RMSE | Values |
+| ----------- | ----------- |
+| Ensemble | 0.138 |
+| SVM | 0.172 |
+| RF  | 0.138 |
+| XGBT | 0.173 |
+| XGBL | 0.162 |
